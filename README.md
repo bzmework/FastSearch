@@ -2,7 +2,8 @@
 FastSearch是一个快速文件搜索系统，它的原理是通过读取NTFS文件系统中的USN日志文件，快速地读取磁盘中的所有文件，并通过文件名称快速搜索。
 
 本程序仅实现了快速扫描和快速搜索，本机测试300万的文件扫描出来大约13秒，从300万中搜索大约0.3秒，具体视不同环境会有所出入。
-在扫描文件时支持通过采用多线程和文件IO端口异步方式并行扫描，但对比发现IO端口速度略有所提升但不明显。
+在扫描文件时支持通过采用多线程和文件IO端口异步方式并行扫描，但对比发现IO端口速度略有所提升但不明显。测试结果如下：  
+![image](https://github.com/bzmework/FastSearch/blob/master/test.jpg)
 
 在国内或者国外都有优秀的文件快速搜索程序，但开源的很少，网络上的源码大多数仅停留在基本的如何操作USN读取文件的层面，
 出于商业目的，对具体的文件排序、文件压缩、文件索引、UI虚拟呈现等算法没有人愿意开源分享，
@@ -94,12 +95,9 @@ FastSearch是一个快速文件搜索系统，它的原理是通过读取NTFS文
     tchar* cstrd(double val, int32 ndigits, tchar* out); //转换double类型值为字符串。
     tchar* cstrf(float val, int32 ndigits, tchar* out); //转换float类型值为字符串。
 
-测试结果：
-![image](https://github.com/bzmework/FastSearch/blob/master/test.jpg)
-
-编译环境：
-Windows 10 64bit
-Microsoft Visual Studio 2019
+编译环境：    
+Windows 10 64bit     
+Microsoft Visual Studio 2019    
 
 
 
