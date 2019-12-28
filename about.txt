@@ -93,9 +93,6 @@ FastSearch是一个快速文件搜索系统，它的原理是通过读取NTFS文
     tchar* cstrd(double val, int32 ndigits, tchar* out); //转换double类型值为字符串。
     tchar* cstrf(float val, int32 ndigits, tchar* out); //转换float类型值为字符串。
 
-测试结果：
-
-
 编译环境：
 Windows 10 64bit
 Microsoft Visual Studio 2019
