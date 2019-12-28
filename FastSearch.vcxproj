@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>FastSearch</ProjectName>
+    <ProjectGuid>{D1F1EA21-8A20-477A-8077-37C5EF3AAA66}</ProjectGuid>
+    <RootNamespace>FastSearch</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC70.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC70.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>16.0.28707.177</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <GenerateManifest>false</GenerateManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>
+      </MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader />
+      <PrecompiledHeaderFile />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <CallingConvention>StdCall</CallingConvention>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <EnforceTypeConversionRules>
+      </EnforceTypeConversionRules>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>msimg32.lib;GdiPlus.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <RemoveUnreferencedCodeData />
+      <CallingConvention>StdCall</CallingConvention>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <EnableEnhancedInstructionSet>
+      </EnableEnhancedInstructionSet>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>msimg32.lib;GdiPlus.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="app.cpp" />
+    <ClCompile Include="lib\array\array.cpp" />
+    <ClCompile Include="lib\dictionary\MurmurHash3.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="lib\hash\hash.cpp" />
+    <ClCompile Include="lib\list\list.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="lib\quicklz\quicklz.c" />
+    <ClCompile Include="lib\regex\regexpr2.cpp" />
+    <ClCompile Include="lib\regex\syntax2.cpp" />
+    <ClCompile Include="lib\string\string.cpp" />
+    <ClCompile Include="lib\string\wstring.cpp" />
+    <ClCompile Include="lib\utility\c2dbl.c" />
+    <ClCompile Include="lib\utility\c2flt.c" />
+    <ClCompile Include="lib\utility\c2int.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="lib\utility\c2int64.c" />
+    <ClCompile Include="lib\utility\c2lng.c" />
+    <ClCompile Include="lib\utility\c2uint.c" />
+    <ClCompile Include="lib\utility\c2uint64.c" />
+    <ClCompile Include="lib\utility\c2ulng.c" />
+    <ClCompile Include="lib\utility\cstrd.c" />
+    <ClCompile Include="lib\utility\cstrf.c" />
+    <ClCompile Include="lib\utility\cstri.c" />
+    <ClCompile Include="lib\utility\cstri64.c" />
+    <ClCompile Include="lib\utility\cstrl.c" />
+    <ClCompile Include="lib\utility\cstrui.c" />
+    <ClCompile Include="lib\utility\cstrui64.c" />
+    <ClCompile Include="lib\utility\cstrul.c" />
+    <ClCompile Include="lib\utility\memchr.c" />
+    <ClCompile Include="lib\utility\memcmp.c" />
+    <ClCompile Include="lib\utility\memcpy.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="lib\utility\memmove.c" />
+    <ClCompile Include="lib\utility\memset.c" />
+    <ClCompile Include="lib\utility\strasc.c" />
+    <ClCompile Include="lib\utility\strcat.c" />
+    <ClCompile Include="lib\utility\strchr.c" />
+    <ClCompile Include="lib\utility\strcmp.c" />
+    <ClCompile Include="lib\utility\strcpy.c" />
+    <ClCompile Include="lib\utility\strcspn.c" />
+    <ClCompile Include="lib\utility\strdup.c" />
+    <ClCompile Include="lib\utility\stricmp.c" />
+    <ClCompile Include="lib\utility\strlcat.c" />
+    <ClCompile Include="lib\utility\strlcpy.c" />
+    <ClCompile Include="lib\utility\strlen.c" />
+    <ClCompile Include="lib\utility\strmatch.c" />
+    <ClCompile Include="lib\utility\strncat.c" />
+    <ClCompile Include="lib\utility\strncmp.c" />
+    <ClCompile Include="lib\utility\strncpy.c" />
+    <ClCompile Include="lib\utility\strndup.c" />
+    <ClCompile Include="lib\utility\strnicmp.c" />
+    <ClCompile Include="lib\utility\strnlen.c" />
+    <ClCompile Include="lib\utility\strnset.c" />
+    <ClCompile Include="lib\utility\strpbrk.c" />
+    <ClCompile Include="lib\utility\strrchr.c" />
+    <ClCompile Include="lib\utility\strrev.c" />
+    <ClCompile Include="lib\utility\strsep.c" />
+    <ClCompile Include="lib\utility\strset.c" />
+    <ClCompile Include="lib\utility\strspn.c" />
+    <ClCompile Include="lib\utility\strstr.c" />
+    <ClCompile Include="lib\utility\strxspn.c" />
+    <ClCompile Include="lib\utility\vsprintf.c" />
+    <ClCompile Include="lib\utility\word.c" />
+    <ClCompile Include="lib\win32cpu\cpu.cpp" />
+    <ClCompile Include="lib\win32filejournal\filejournal.cpp" />
+    <ClCompile Include="lib\win32filejournal\filejournals.cpp" />
+    <ClCompile Include="lib\win32filesearch\filesearch.cpp" />
+    <ClCompile Include="lib\win32file\file.cpp" />
+    <ClCompile Include="lib\win32gdip\gdip.cpp" />
+    <ClCompile Include="lib\win32gdi\gdi.cpp" />
+    <ClCompile Include="lib\win32image\image.cpp" />
+    <ClCompile Include="lib\win32memdc\memdc.cpp" />
+    <ClCompile Include="lib\win32sync\sync.cpp" />
+    <ClCompile Include="lib\win32thread\thread.cpp" />
+    <ClCompile Include="lib\win32timer\timer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="lib\array\array.h" />
+    <ClInclude Include="lib\dictionary\BlizzardHash.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="lib\dictionary\dictionary.h" />
+    <ClInclude Include="lib\dictionary\FastHash.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="lib\dictionary\hashhelpers.h" />
+    <ClInclude Include="lib\dictionary\MurmurHash3.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="lib\dictionary\SuperFastHash.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="lib\dictionary\vmemalloc.h" />
+    <ClInclude Include="lib\hash\hash.h" />
+    <ClInclude Include="lib\lib.h" />
+    <ClInclude Include="lib\list\list.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="lib\quicklz\quicklz.h" />
+    <ClInclude Include="lib\regex\regexpr2.h" />
+    <ClInclude Include="lib\regex\reimpl2.h" />
+    <ClInclude Include="lib\regex\restack.h" />
+    <ClInclude Include="lib\regex\syntax2.h" />
+    <ClInclude Include="lib\string\string.h" />
+    <ClInclude Include="lib\string\wstring.h" />
+    <ClInclude Include="lib\typecvt.h" />
+    <ClInclude Include="lib\typedef.h" />
+    <ClInclude Include="lib\utility\assert.h" />
+    <ClInclude Include="lib\utility\utility.h" />
+    <ClInclude Include="lib\win32cpu\cpu.h" />
+    <ClInclude Include="lib\win32exception\exception.h" />
+    <ClInclude Include="lib\win32filejournal\iocp.h" />
+    <ClInclude Include="lib\win32filejournal\iocpfilereq.h" />
+    <ClInclude Include="lib\win32filejournal\usn.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="lib\win32filejournal\filejournal.h" />
+    <ClInclude Include="lib\win32filejournal\filejournals.h" />
+    <ClInclude Include="lib\win32filejournal\ntfs.h" />
+    <ClInclude Include="lib\win32filesearch\filesearch.h" />
+    <ClInclude Include="lib\win32file\file.h" />
+    <ClInclude Include="lib\win32gdip\gdip.h" />
+    <ClInclude Include="lib\win32gdi\gdi.h" />
+    <ClInclude Include="lib\win32image\image.h" />
+    <ClInclude Include="lib\win32include\winnt.h" />
+    <ClInclude Include="lib\win32memdc\memdc.h" />
+    <ClInclude Include="lib\win32mmap\memmap.h" />
+    <ClInclude Include="lib\win32sync\sync.h" />
+    <ClInclude Include="lib\win32thread\thread.h" />
+    <ClInclude Include="lib\win32timer\timer.h" />
+    <ClInclude Include="stdafx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="lib\utility\memchr.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="lib\utility\memcmp.c-bak-勿删">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <CustomBuild Include="lib\utility\memcpy.asm">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </CustomBuild>
+    <None Include="lib\utility\memcpy.c-bak-勿删">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="lib\utility\memicmp.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="lib\utility\memmove.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="lib\utility\memset.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="lib\utility\strcat.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="lib\utility\strchr.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="lib\utility\strcmp.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="lib\utility\strcspn.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="lib\utility\strlen.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="lib\utility\strncat.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="lib\utility\strncmp.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="lib\utility\strncpy.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="lib\utility\strnicmp.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="lib\utility\strnset.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="lib\utility\strpbrk.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="lib\utility\strrchr.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="lib\utility\strrev.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="lib\utility\strset.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="lib\utility\strspn.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </None>
+    <None Include="lib\utility\strstr.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </None>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>

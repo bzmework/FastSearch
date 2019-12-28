@@ -1,0 +1,1078 @@
+
+/*
+功能： 将src所指源内存区域复制n个字节到dst所指的目标内存区域中，并返回指向dst目标内存区域的指针。
+参数： dst，目标内存区域；
+	  src，源内存区域;
+	  n, 拷贝的字节数。
+返回： 返回指向目标内存区域的指针。
+说明： 
+*/
+
+#include <emmintrin.h>
+#include <string.h>
+#include "../typedef.h"
+
+#pragma region 字节操作 
+
+//字节对齐
+#define ALIGN(p, n) ((((tint)p % n) % n) == 0 ? 1 : 0)
+
+//拷贝1字节
+#define COPY_1B(dst, src) *((uint8*)dst) = *((uint8*)src);
+
+//拷贝2字节
+#define COPY_2B(dst, src) *((uint16*)dst) = *((uint16*)src);
+
+//拷贝4字节
+#define COPY_4B(dst, src) *((uint32*)dst) = *((uint32*)src);
+
+//拷贝8字节
+#define COPY_8B(dst, src) *((uint64*)dst) = *((uint64*)src);
+
+//拷贝16字节
+#define COPY_16B(dst, src) \
+	_mm_storeu_si128(((__m128i*)dst) + 0, _mm_loadu_si128(((const __m128i*)src) + 0))
+
+//拷贝32字节
+#define COPY_32B(dst, src) \
+	_mm_storeu_si128(((__m128i*)dst) + 0, _mm_loadu_si128(((const __m128i*)src) + 0)); \
+	_mm_storeu_si128(((__m128i*)dst) + 1, _mm_loadu_si128(((const __m128i*)src) + 1))
+
+//拷贝48字节
+#define COPY_48B(dst, src) \
+	_mm_storeu_si128(((__m128i*)dst) + 0, _mm_loadu_si128(((const __m128i*)src) + 0)); \
+	_mm_storeu_si128(((__m128i*)dst) + 1, _mm_loadu_si128(((const __m128i*)src) + 1)); \
+	_mm_storeu_si128(((__m128i*)dst) + 2, _mm_loadu_si128(((const __m128i*)src) + 2))
+
+//拷贝64字节
+#define COPY_64B(dst, src) \
+	_mm_storeu_si128(((__m128i*)dst) + 0, _mm_loadu_si128(((const __m128i*)src) + 0)); \
+	_mm_storeu_si128(((__m128i*)dst) + 1, _mm_loadu_si128(((const __m128i*)src) + 1)); \
+	_mm_storeu_si128(((__m128i*)dst) + 2, _mm_loadu_si128(((const __m128i*)src) + 2)); \
+	_mm_storeu_si128(((__m128i*)dst) + 3, _mm_loadu_si128(((const __m128i*)src) + 3))
+
+//拷贝80字节
+#define COPY_80B(dst, src) \
+	_mm_storeu_si128(((__m128i*)dst) + 0, _mm_loadu_si128(((const __m128i*)src) + 0)); \
+	_mm_storeu_si128(((__m128i*)dst) + 1, _mm_loadu_si128(((const __m128i*)src) + 1)); \
+	_mm_storeu_si128(((__m128i*)dst) + 2, _mm_loadu_si128(((const __m128i*)src) + 2)); \
+	_mm_storeu_si128(((__m128i*)dst) + 3, _mm_loadu_si128(((const __m128i*)src) + 3)); \
+	_mm_storeu_si128(((__m128i*)dst) + 4, _mm_loadu_si128(((const __m128i*)src) + 3))
+
+//拷贝96字节
+#define COPY_96B(dst, src) \
+	_mm_storeu_si128(((__m128i*)dst) + 0, _mm_loadu_si128(((const __m128i*)src) + 0)); \
+	_mm_storeu_si128(((__m128i*)dst) + 1, _mm_loadu_si128(((const __m128i*)src) + 1)); \
+	_mm_storeu_si128(((__m128i*)dst) + 2, _mm_loadu_si128(((const __m128i*)src) + 2)); \
+	_mm_storeu_si128(((__m128i*)dst) + 3, _mm_loadu_si128(((const __m128i*)src) + 3)); \
+	_mm_storeu_si128(((__m128i*)dst) + 4, _mm_loadu_si128(((const __m128i*)src) + 4)); \
+	_mm_storeu_si128(((__m128i*)dst) + 5, _mm_loadu_si128(((const __m128i*)src) + 5))
+
+//拷贝112字节
+#define COPY_112B(dst, src) \
+	_mm_storeu_si128(((__m128i*)dst) + 0, _mm_loadu_si128(((const __m128i*)src) + 0)); \
+	_mm_storeu_si128(((__m128i*)dst) + 1, _mm_loadu_si128(((const __m128i*)src) + 1)); \
+	_mm_storeu_si128(((__m128i*)dst) + 2, _mm_loadu_si128(((const __m128i*)src) + 2)); \
+	_mm_storeu_si128(((__m128i*)dst) + 3, _mm_loadu_si128(((const __m128i*)src) + 3)); \
+	_mm_storeu_si128(((__m128i*)dst) + 4, _mm_loadu_si128(((const __m128i*)src) + 4)); \
+	_mm_storeu_si128(((__m128i*)dst) + 5, _mm_loadu_si128(((const __m128i*)src) + 5)); \
+	_mm_storeu_si128(((__m128i*)dst) + 6, _mm_loadu_si128(((const __m128i*)src) + 6))
+
+//拷贝128字节
+#define COPY_128B(dst, src) \
+	_mm_storeu_si128(((__m128i*)dst) + 0, _mm_loadu_si128(((const __m128i*)src) + 0)); \
+	_mm_storeu_si128(((__m128i*)dst) + 1, _mm_loadu_si128(((const __m128i*)src) + 1)); \
+	_mm_storeu_si128(((__m128i*)dst) + 2, _mm_loadu_si128(((const __m128i*)src) + 2)); \
+	_mm_storeu_si128(((__m128i*)dst) + 3, _mm_loadu_si128(((const __m128i*)src) + 3)); \
+	_mm_storeu_si128(((__m128i*)dst) + 4, _mm_loadu_si128(((const __m128i*)src) + 4)); \
+	_mm_storeu_si128(((__m128i*)dst) + 5, _mm_loadu_si128(((const __m128i*)src) + 5)); \
+	_mm_storeu_si128(((__m128i*)dst) + 6, _mm_loadu_si128(((const __m128i*)src) + 6)); \
+	_mm_storeu_si128(((__m128i*)dst) + 7, _mm_loadu_si128(((const __m128i*)src) + 7))
+
+//移动1字节
+#define MOVE_1B(dst, src)  dst+=1; src+=1
+
+//移动2字节
+#define MOVE_2B(dst, src)  dst+=2; src+=2
+
+//移动4字节
+#define MOVE_4B(dst, src)  dst+=4; src+=4
+
+//移动8字节
+#define MOVE_8B(dst, src)  dst+=8; src+=8
+
+//移动16字节
+#define MOVE_16B(dst, src) dst+=16; src+=16
+
+//移动32字节
+#define MOVE_32B(dst, src) dst+=32; src+=32
+
+//移动48字节
+#define MOVE_48B(dst, src) dst+=48; src+=48
+
+//移动64字节
+#define MOVE_64B(dst, src) dst+=64; src+=64
+
+//移动80字节
+#define MOVE_80B(dst, src) dst+=80; src+=80
+
+//移动96字节
+#define MOVE_96B(dst, src) dst+=96; src+=96
+
+//移动112字节
+#define MOVE_112B(dst, src) dst+=112; src+=112
+
+//移动128字节
+#define MOVE_128B(dst, src) dst+=128; src+=128
+
+#pragma endregion
+
+//拷贝小数据(<= 128 字节), 按4字节对齐拷贝
+_INLINE_ void* qmemcpys(void* dst, const void* src, tint n)
+{
+#ifdef __i386__
+	__asm
+	{
+		//MOVSB(move string byte),字符串传送指令，这条指令按字节(unsigned char，1个字节)传送数据。
+		//MOVSW(move string word),字符串传送指令，这条指令按字(unsigned short，2个字节)传送数据。
+		//MOVSD(move string dword),字符串传送指令，这条指令按双字(unsigned int/long，4个字节)传送数据。
+		//EAX 是"累加器"(accumulator), 它是很多加法乘法指令的缺省寄存器。
+		//EBX 是"基地址"(base)寄存器, 在内存寻址时存放基地址。
+		//ECX 是计数器(counter), 是重复(REP)前缀指令和LOOP指令的内定计数器。
+		//EDX 则总是被用来放整数除法产生的余数。
+		//ESI/EDI分别叫做"源/目标索引寄存器"(source/destination index), 因为在很多字符串操作指令中, DS:ESI指向源串, 而ES:EDI指向目标串.
+		//ESP 专门用作堆栈指针，被形象地称为栈顶指针，堆栈的顶部是地址小的区域，压入堆栈的数据越多，ESP也就越来越小。在32位平台上，ESP每次减少4字节。
+
+		//JZ是累加器EAX判零条件转移指令。
+		//JZ(jump if zero)，即零标志(ZF)为0就跳转，一般与cmp连用，用以判断两数是否相等。
+		//JZ的另一种写法就是je(jump if equal)，jz和je的作用是完全一样的。
+
+		//cld/std 是方向标志 
+		//cld 是来控制重复移动时候的esi和edi的递增方式。 
+		//cld 是将方向标志位DF设置为0，每次rep循环的时候, esi和edi自动 + 1。   
+		//std 是将方向标志位DF设置为1，每次rep循环的时候, esi和edi自动 - 1。
+
+		//rep 是循环指令, 在执行循环(loop)的时候，ecx寄存器是每次减1的。
+
+		//SHR 是逻辑右移指令。
+		//SAR 是算术右移指令。
+		//SHR 和 SAR都是右移指令。只不过SHR右移的时候，它的最高位用0填补，最低位移入CF; 而SAR右移的时候，最高位不变，最低位移入CF
+
+		push	esi			//保存当前esi数据
+		push	edi			//保存当前edi数据
+		mov		esi, src	//将src的地址放入esi
+		mov		edi, dst	//将dst的地址放入dsi
+		mov		ecx, n		//将要复制的字节数放入ecx
+		cld					//设置方向标志，每次rep循环的时候, esi和edi自动 + 1。
+
+		mov		eax, esi	//将esi放入eax
+		or      eax, edi	//判断esi(src)或edi(dst)是否为空(0)
+		or      eax, n		//将字节数n放入尾部
+		and     eax, 3		//求余：n mod 4
+		jz		fast_copy	//如果eax=0(n mod 4无余数)，即n能够被4整除，则跳转到fast_copy进行4字节快速拷贝
+
+		rep		movsb		//从esi(src)开始拷贝n个字节到edi(dst)中	(每次复制1个字节)
+		jmp		copy_done   //跳转到copy_done
+
+    fast_copy :
+        shr     ecx, 2		//整除，相当于：(int)(n / 4);
+        rep     movsd		//从esi(src)开始拷贝n个字节到edi(dst)中(每次复制4个字节)
+
+	copy_done :
+        mov     eax, dst    //返回dst目标内存区域地址
+        pop     edi			//恢复edi
+        pop     esi			//恢复esi
+	
+	}
+	//gc++
+	//asm volatile("movl %0, %%edi \n"
+	//             "movl %1, %%esi \n"
+	//             "movl %2, %%ecx \n"
+	//             "cld            \n"
+	//             "rep            \n"
+	//             "movsb          \n"
+	//             : /* no output */
+	//             : "m"(dst), "m"(src), "m"(n)
+	//             : "edi", "esi", "ecx");
+#else
+	void* ret = dst;
+
+	if (n < 4) //按字节拷贝
+	{
+		char* pdst = (char*)dst;
+		char* psrc = (char*)src;
+
+		int32 count = n;
+		for (; count; count--)
+		{
+			*pdst++ = *psrc++; //copy from lower addresses to higher addresses
+		}
+	}
+	else //n >= 4 对齐快速拷贝
+	{
+		if (dst <= src || (char*)dst >= ((char*)src + n))
+		{
+			//非重叠缓冲区
+			//Non-Overlapping Buffers
+			//copy from lower addresses to higher addresses
+
+			//拷贝0-len之间的数据
+			int32* pndst = (int32*)dst; //转换为4字节整型指针
+			int32* pnsrc = (int32*)src;
+			int32 len = n >> 2; //整除，相当于：(int)(n / 4);
+			for (; len; len--)
+			{
+				*pndst++ = *pnsrc++; //copy from lower addresses to higher addresses
+			}
+
+			//将剩余的数据按字节拷贝
+			int32 rem = n & 3; //求余，相当于：n % 4；
+			if (rem)
+			{
+				len = n >> 2;
+				char* pcdst = (char*)pndst;
+				char* pcsrc = (char*)pnsrc;
+				for (; rem; rem--)
+				{
+					*pcdst++ = *pcsrc++; //copy from lower addresses to higher addresses
+				}
+			}
+		}
+		else
+		{
+			//重叠缓冲区,即同一缓冲区
+			//Overlapping Buffers
+			//copy from higher addresses to lower addresses
+
+			//拷贝0-len之间的数据
+			int32* pndst = (int32*)((char*)dst + n); //转换为4字节整型指针
+			int32* pnsrc = (int32*)((char*)src + n);
+			int32 len = n >> 2; //整除，相当于：(int)(n / 4);
+			for (; len; len--)
+			{
+				*--pndst = *--pnsrc; //copy from lower addresses to higher addresses
+			}
+
+			//将剩余的数据按字节拷贝
+			int32 rem = n & 3; //求余，相当于：n % 4；
+			if (rem)
+			{
+				char* pcdst = (char*)pndst;
+				char* pcsrc = (char*)pnsrc;
+				for (; rem; rem--)
+				{
+					*--pcdst = *--pcsrc; //copy from lower addresses to higher addresses
+				}
+			}
+		}
+	}
+
+	//返回
+	return ret;
+
+#endif
+}
+
+//拷贝小数据(<= 128 字节), 按8字节或16字节对齐拷贝
+_INLINE_ void* qmemcpyss(void* dst, const void* src, tint n)
+{
+	char* pdst = (char*)dst;
+	const char* psrc = ((const char*)src);
+
+	switch (n)
+	{
+	case 1:
+		COPY_1B(pdst, psrc);
+		break;
+	case 2:
+		COPY_2B(pdst, psrc);
+		break;
+	case 3:
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+
+	case 4:
+		COPY_4B(pdst, psrc);
+		break;
+	case 5:
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 6:
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc); 
+		break;
+	case 7:
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+
+	case 8:
+		COPY_8B(pdst, psrc);
+		break;
+	case 9:
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 10:
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 11:
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 12:
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc);
+		break;
+	case 13:
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 14:
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 15:
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+
+	case 16:
+		COPY_16B(pdst, psrc);
+		break;
+	case 17:
+		COPY_16B(pdst, psrc); MOVE_16B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 18:
+		COPY_16B(pdst, psrc); MOVE_16B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 19:
+		COPY_16B(pdst, psrc); MOVE_16B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 20:
+		COPY_16B(pdst, psrc); MOVE_16B(pdst, psrc);
+		COPY_4B(pdst, psrc); 
+		break;
+	case 21:
+		COPY_16B(pdst, psrc); MOVE_16B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 22:
+		COPY_16B(pdst, psrc); MOVE_16B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 23:
+		COPY_16B(pdst, psrc); MOVE_16B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 24:
+		COPY_16B(pdst, psrc); MOVE_16B(pdst, psrc);
+		COPY_8B(pdst, psrc);
+		break;
+	case 25:
+		COPY_16B(pdst, psrc); MOVE_16B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 26:
+		COPY_16B(pdst, psrc); MOVE_16B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 27:
+		COPY_16B(pdst, psrc); MOVE_16B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 28:
+		COPY_16B(pdst, psrc); MOVE_16B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); 
+		break;
+	case 29:
+		COPY_16B(pdst, psrc); MOVE_16B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 30:
+		COPY_16B(pdst, psrc); MOVE_16B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 31:
+		COPY_16B(pdst, psrc); MOVE_16B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+
+	case 32:
+		COPY_32B(pdst, psrc); 
+		break;
+	case 33:
+		COPY_32B(pdst, psrc); MOVE_32B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 34:
+		COPY_32B(pdst, psrc); MOVE_32B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 35:
+		COPY_32B(pdst, psrc); MOVE_32B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 36:
+		COPY_32B(pdst, psrc); MOVE_32B(pdst, psrc);
+		COPY_4B(pdst, psrc); 
+		break;
+	case 37:
+		COPY_32B(pdst, psrc); MOVE_32B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 38:
+		COPY_32B(pdst, psrc); MOVE_32B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 39:
+		COPY_32B(pdst, psrc); MOVE_32B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 40:
+		COPY_32B(pdst, psrc); MOVE_32B(pdst, psrc);
+		COPY_8B(pdst, psrc);
+		break;
+	case 41:
+		COPY_32B(pdst, psrc); MOVE_32B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 42:
+		COPY_32B(pdst, psrc); MOVE_32B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 43:
+		COPY_32B(pdst, psrc); MOVE_32B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 44:
+		COPY_32B(pdst, psrc); MOVE_32B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); 
+		break;
+	case 45:
+		COPY_32B(pdst, psrc); MOVE_32B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 46:
+		COPY_32B(pdst, psrc); MOVE_32B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+
+	case 48:
+		COPY_48B(pdst, psrc); 
+		break;
+	case 49:
+		COPY_48B(pdst, psrc); MOVE_48B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+	case 50:
+		COPY_48B(pdst, psrc); MOVE_48B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 51:
+		COPY_48B(pdst, psrc); MOVE_48B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 52:
+		COPY_48B(pdst, psrc); MOVE_48B(pdst, psrc);
+		COPY_4B(pdst, psrc); 
+		break;
+	case 53:
+		COPY_48B(pdst, psrc); MOVE_48B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 54:
+		COPY_48B(pdst, psrc); MOVE_48B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 55:
+		COPY_48B(pdst, psrc); MOVE_48B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 56:
+		COPY_48B(pdst, psrc); MOVE_48B(pdst, psrc);
+		COPY_8B(pdst, psrc); 
+		break;
+	case 57:
+		COPY_48B(pdst, psrc); MOVE_48B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 58:
+		COPY_48B(pdst, psrc); MOVE_48B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 59:
+		COPY_48B(pdst, psrc); MOVE_48B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 60:
+		COPY_48B(pdst, psrc); MOVE_48B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); 
+		break;
+	case 61:
+		COPY_48B(pdst, psrc); MOVE_48B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 62:
+		COPY_48B(pdst, psrc); MOVE_48B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 63:
+		COPY_48B(pdst, psrc); MOVE_48B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+
+	case 64:
+		COPY_64B(pdst, psrc);
+		break;
+	case 65:
+		COPY_64B(pdst, psrc); MOVE_64B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 66:
+		COPY_64B(pdst, psrc); MOVE_64B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 67:
+		COPY_64B(pdst, psrc); MOVE_64B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 68:
+		COPY_64B(pdst, psrc); MOVE_64B(pdst, psrc);
+		COPY_4B(pdst, psrc);
+		break;
+	case 69:
+		COPY_64B(pdst, psrc); MOVE_64B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 70:
+		COPY_64B(pdst, psrc); MOVE_64B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 71:
+		COPY_64B(pdst, psrc); MOVE_64B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 72:
+		COPY_64B(pdst, psrc); MOVE_64B(pdst, psrc);
+		COPY_8B(pdst, psrc);
+		break;
+	case 73:
+		COPY_64B(pdst, psrc); MOVE_64B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 74:
+		COPY_64B(pdst, psrc); MOVE_64B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 75:
+		COPY_64B(pdst, psrc); MOVE_64B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 76:
+		COPY_64B(pdst, psrc); MOVE_64B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc);
+		break;
+	case 77:
+		COPY_64B(pdst, psrc); MOVE_64B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 78:
+		COPY_64B(pdst, psrc); MOVE_64B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 79:
+		COPY_64B(pdst, psrc); MOVE_64B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+
+	case 80:
+		COPY_80B(pdst, psrc);
+		break;
+	case 81:
+		COPY_80B(pdst, psrc); MOVE_80B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 82:
+		COPY_80B(pdst, psrc); MOVE_80B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 83:
+		COPY_80B(pdst, psrc); MOVE_80B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 84:
+		COPY_80B(pdst, psrc); MOVE_80B(pdst, psrc);
+		COPY_4B(pdst, psrc);
+		break;
+	case 85:
+		COPY_80B(pdst, psrc); MOVE_80B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 86:
+		COPY_80B(pdst, psrc); MOVE_80B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 87:
+		COPY_80B(pdst, psrc); MOVE_80B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 88:
+		COPY_80B(pdst, psrc); MOVE_80B(pdst, psrc);
+		COPY_8B(pdst, psrc);
+		break;
+	case 89:
+		COPY_80B(pdst, psrc); MOVE_80B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 90:
+		COPY_80B(pdst, psrc); MOVE_80B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 91:
+		COPY_80B(pdst, psrc); MOVE_80B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 92:
+		COPY_80B(pdst, psrc); MOVE_80B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); 
+		break;
+	case 93:
+		COPY_80B(pdst, psrc); MOVE_80B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 94:
+		COPY_80B(pdst, psrc); MOVE_80B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 95:
+		COPY_80B(pdst, psrc); MOVE_80B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+
+	case 96:
+		COPY_96B(pdst, psrc); 
+		break;
+	case 97:
+		COPY_96B(pdst, psrc); MOVE_96B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 98:
+		COPY_96B(pdst, psrc); MOVE_96B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 99:
+		COPY_96B(pdst, psrc); MOVE_96B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 100:
+		COPY_96B(pdst, psrc); MOVE_96B(pdst, psrc);
+		COPY_4B(pdst, psrc); 
+		break;
+	case 101:
+		COPY_96B(pdst, psrc); MOVE_96B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 102:
+		COPY_96B(pdst, psrc); MOVE_96B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 103:
+		COPY_96B(pdst, psrc); MOVE_96B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+	case 104:
+		COPY_96B(pdst, psrc); MOVE_96B(pdst, psrc);
+		COPY_8B(pdst, psrc);
+		break;
+	case 105:
+		COPY_96B(pdst, psrc); MOVE_96B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 106:
+		COPY_96B(pdst, psrc); MOVE_96B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 107:
+		COPY_96B(pdst, psrc); MOVE_96B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 108:
+		COPY_96B(pdst, psrc); MOVE_96B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc);
+		break;
+	case 109:
+		COPY_96B(pdst, psrc); MOVE_96B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 110:
+		COPY_96B(pdst, psrc); MOVE_96B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+	case 111:
+		COPY_96B(pdst, psrc); MOVE_96B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+
+	case 112:
+		COPY_112B(pdst, psrc);
+		break;
+	case 113:
+		COPY_112B(pdst, psrc); MOVE_112B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 114:
+		COPY_112B(pdst, psrc); MOVE_112B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 115:
+		COPY_112B(pdst, psrc); MOVE_112B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 116:
+		COPY_112B(pdst, psrc); MOVE_112B(pdst, psrc);
+		COPY_4B(pdst, psrc);
+		break;
+	case 117:
+		COPY_112B(pdst, psrc); MOVE_112B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 118:
+		COPY_112B(pdst, psrc); MOVE_112B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 119:
+		COPY_112B(pdst, psrc); MOVE_112B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 120:
+		COPY_112B(pdst, psrc); MOVE_112B(pdst, psrc);
+		COPY_8B(pdst, psrc);
+		break;
+	case 121:
+		COPY_112B(pdst, psrc); MOVE_112B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 122:
+		COPY_112B(pdst, psrc); MOVE_112B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 123:
+		COPY_112B(pdst, psrc); MOVE_112B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 124:
+		COPY_112B(pdst, psrc); MOVE_112B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); 
+		break;
+	case 125:
+		COPY_112B(pdst, psrc); MOVE_112B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+	case 126:
+		COPY_112B(pdst, psrc); MOVE_112B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc);
+		break;
+	case 127:
+		COPY_112B(pdst, psrc); MOVE_112B(pdst, psrc);
+		COPY_8B(pdst, psrc); MOVE_8B(pdst, psrc);
+		COPY_4B(pdst, psrc); MOVE_4B(pdst, psrc);
+		COPY_2B(pdst, psrc); MOVE_2B(pdst, psrc);
+		COPY_1B(pdst, psrc);
+		break;
+
+	case 128:
+		COPY_128B(pdst, psrc);
+		break;
+	}
+
+	return dst;
+}
+
+//拷贝大数据(>128字节), 按16字节对齐拷贝
+_INLINE_ void* qmemcpyl(void* dst, const void* src, tint n)
+{
+	static tint cachesize = 0x200000; // L2-cache size
+
+	void* ret = dst;
+	char* pdst = (char*)dst;
+	const char* psrc = (const char*)src;
+	tint padding = 0;
+	tint count = n;
+
+	//必须将目标对齐到16字节边界
+	padding = (16 - (((tint)pdst) & 15)) & 15;
+	if (padding > 0)
+	{
+		__m128i head = _mm_loadu_si128((const __m128i*)psrc);
+		_mm_storeu_si128((__m128i*)pdst, head);
+		pdst += padding;
+		psrc += padding;
+		count -= padding;
+	}
+
+	// 中等大小的数据拷贝
+	if (count <= cachesize)
+	{
+		__m128i c0, c1, c2, c3, c4, c5, c6, c7;
+
+		for (; count >= 128; count -= 128)
+		{
+			//读128字节
+			c0 = _mm_loadu_si128(((const __m128i*)psrc) + 0);
+			c1 = _mm_loadu_si128(((const __m128i*)psrc) + 1);
+			c2 = _mm_loadu_si128(((const __m128i*)psrc) + 2);
+			c3 = _mm_loadu_si128(((const __m128i*)psrc) + 3);
+			c4 = _mm_loadu_si128(((const __m128i*)psrc) + 4);
+			c5 = _mm_loadu_si128(((const __m128i*)psrc) + 5);
+			c6 = _mm_loadu_si128(((const __m128i*)psrc) + 6);
+			c7 = _mm_loadu_si128(((const __m128i*)psrc) + 7);
+
+			//预取
+			_mm_prefetch((const char*)(psrc + 256), _MM_HINT_NTA);
+
+			//写128字节
+			_mm_store_si128((((__m128i*)pdst) + 0), c0);
+			_mm_store_si128((((__m128i*)pdst) + 1), c1);
+			_mm_store_si128((((__m128i*)pdst) + 2), c2);
+			_mm_store_si128((((__m128i*)pdst) + 3), c3);
+			_mm_store_si128((((__m128i*)pdst) + 4), c4);
+			_mm_store_si128((((__m128i*)pdst) + 5), c5);
+			_mm_store_si128((((__m128i*)pdst) + 6), c6);
+			_mm_store_si128((((__m128i*)pdst) + 7), c7);
+
+			//下一块
+			psrc += 128;
+			pdst += 128;
+		}
+
+		//拷贝剩余数据
+		memcpy(pdst, psrc, count);
+	}
+	else //大数据拷贝
+	{
+		__m128i c0, c1, c2, c3, c4, c5, c6, c7;
+
+		//先预取
+		_mm_prefetch((const char*)(psrc), _MM_HINT_NTA);
+
+		//拷贝
+		if ((((size_t)psrc) & 15) == 0) //源16字节对齐
+		{	
+			for (; count >= 128; count -= 128)
+			{
+				//读128字节
+				c0 = _mm_load_si128(((const __m128i*)psrc) + 0);
+				c1 = _mm_load_si128(((const __m128i*)psrc) + 1);
+				c2 = _mm_load_si128(((const __m128i*)psrc) + 2);
+				c3 = _mm_load_si128(((const __m128i*)psrc) + 3);
+				c4 = _mm_load_si128(((const __m128i*)psrc) + 4);
+				c5 = _mm_load_si128(((const __m128i*)psrc) + 5);
+				c6 = _mm_load_si128(((const __m128i*)psrc) + 6);
+				c7 = _mm_load_si128(((const __m128i*)psrc) + 7);
+
+				//预取
+				_mm_prefetch((const char*)(psrc + 256), _MM_HINT_NTA);
+
+				//写128字节
+				_mm_stream_si128((((__m128i*)pdst) + 0), c0);
+				_mm_stream_si128((((__m128i*)pdst) + 1), c1);
+				_mm_stream_si128((((__m128i*)pdst) + 2), c2);
+				_mm_stream_si128((((__m128i*)pdst) + 3), c3);
+				_mm_stream_si128((((__m128i*)pdst) + 4), c4);
+				_mm_stream_si128((((__m128i*)pdst) + 5), c5);
+				_mm_stream_si128((((__m128i*)pdst) + 6), c6);
+				_mm_stream_si128((((__m128i*)pdst) + 7), c7);
+
+				//下一块
+				psrc += 128;
+				pdst += 128;
+			}
+		}
+		else //源未16字节对齐
+		{	
+			for (; count >= 128; count -= 128)
+			{
+				//读128字节
+				c0 = _mm_loadu_si128(((const __m128i*)psrc) + 0);
+				c1 = _mm_loadu_si128(((const __m128i*)psrc) + 1);
+				c2 = _mm_loadu_si128(((const __m128i*)psrc) + 2);
+				c3 = _mm_loadu_si128(((const __m128i*)psrc) + 3);
+				c4 = _mm_loadu_si128(((const __m128i*)psrc) + 4);
+				c5 = _mm_loadu_si128(((const __m128i*)psrc) + 5);
+				c6 = _mm_loadu_si128(((const __m128i*)psrc) + 6);
+				c7 = _mm_loadu_si128(((const __m128i*)psrc) + 7);
+
+				//预取
+				_mm_prefetch((const char*)(psrc + 256), _MM_HINT_NTA);
+				
+				//写入
+				_mm_stream_si128((((__m128i*)pdst) + 0), c0);
+				_mm_stream_si128((((__m128i*)pdst) + 1), c1);
+				_mm_stream_si128((((__m128i*)pdst) + 2), c2);
+				_mm_stream_si128((((__m128i*)pdst) + 3), c3);
+				_mm_stream_si128((((__m128i*)pdst) + 4), c4);
+				_mm_stream_si128((((__m128i*)pdst) + 5), c5);
+				_mm_stream_si128((((__m128i*)pdst) + 6), c6);
+				_mm_stream_si128((((__m128i*)pdst) + 7), c7);
+				
+				//下一块
+				psrc += 128;
+				pdst += 128;
+			}
+		}
+		_mm_sfence();
+
+		//拷贝剩余数据
+		memcpy(pdst, psrc, count);
+	}
+
+	return ret;
+
+}
+
+//快速拷贝
+//注意如果在循环内进行大数据量拷贝，应该直接调用qmemcpys/qmemcpyss/qmemcpyl，
+//因为函数堆栈切换将耗用非常多的时间。
+_INLINE_ void* qmemcpy(void* dst, const void* src, tint n)
+{
+	if (n > 128) //大数据
+	{
+		return qmemcpyl(dst, src, n);
+	}
+	else //小数据
+	{
+		if (ALIGN(dst, 16) || ALIGN(dst, 8))
+		{
+			return qmemcpyss(dst, src, n);
+		}
+		else 
+		{
+			//测试发现系统内置的memcpy函数，在小于128字节的情况下，编译器已经做了最大优化
+			//return memcpy(dst, src, n);
+			return qmemcpys(dst, src, n);
+		}
+	}
+}

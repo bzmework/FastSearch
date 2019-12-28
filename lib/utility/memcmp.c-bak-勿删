@@ -1,0 +1,371 @@
+
+/*
+功能： 将src源内存区域与dst目标内存区域的n个字节进行比较
+参数： dst，目标内存区域；
+	  src，源内存区域;
+	  n, 比较的字节数。
+返回： 如果 dst > src 返回值 > 0
+	  如果 dst < src 返回值 < 0
+	  如果 dst = src 返回值 = 0
+说明：
+*/
+
+#include <emmintrin.h>
+#include "../typedef.h"
+
+int32 qmemcmp(const void* dst, const void* src, tint n)
+{
+	//基本判断
+	//if (!n) //为零
+	//	return 0;
+	//if (dst == src) //相同的内存区域
+	//	return 0;
+
+	//参考: https://macosxfilerecovery.com/faster-memory-comparison-in-c/
+	//     正如作者所说简单优化后要比一些标准库的传统算法快35%，
+	//     这是因为现在的CPU比较两个4字节整型数比比较两个单字节字符要快，而且需要更少的CPU周期。
+	//参考：http://www.picklingtools.com/study.pdf
+	//     在这篇论文中作者给出了同样的结论，即4字节对齐优化算法，并给出更为具体的算法。
+	//参考：GNU C Library: http://www.gnu.org
+	//     glibc标准库同样是4字节对齐优化算法，但其memcmp.c给出的是一个更为完善的优化算法。
+	//根据以上参考算法，编写的优化算法如下：
+	if (n < 4)//按字节比较
+	{
+		//参考FreeBSD等各种算法后，优化的传统算法如下：
+		const uchar* pdst = (uchar*)dst;
+		const uchar* psrc = (uchar*)src;
+		tint count = n;
+		for (; count; count--)
+		{
+			if (*pdst != *psrc)
+				return (uchar)*pdst - (uchar)*psrc;
+			pdst++;
+			psrc++;
+		}
+	}
+	else //n >= 4 对齐快速比较
+	{
+		//比较0-len之间的数据
+		const int32* pndst = (int32*)dst; //转换为4字节整型指针
+		const int32* pnsrc = (int32*)src;
+		int32 len = n >> 2; //整除，相当于：(int)(n / 4);
+		for (; len; len--)
+		{
+			if (*pndst != *pnsrc) 
+				return (uchar)*pndst - (uchar)*pnsrc;
+			pndst++;
+			pnsrc++;
+		}
+
+		//将剩余的最后4个字节按照传统算法比较
+		const uint8* pcdst = (uint8*)pndst; 
+		const uint8* pcsrc = (uint8*)pnsrc;
+		int32 rem = n & 3; //求余，相当于：n % 4；
+		for (; rem; rem--)
+		{
+			if (*pcdst != *pcsrc) 
+				return (uchar)*pcdst - (uchar)*pcsrc;
+			pcdst++;
+			pcsrc++;
+		}
+	}
+
+	//相等
+	return 0;
+}
+
+//gc++未公布的函数
+//参考：https://software.intel.com/en-us/forums/intel-isa-extensions/topic/551747
+//The functions are faster if called with const "size" parameter due to smart inlinement.
+//如果使用const "size"参数调用函数，由于智能内联，速度更快。
+
+//WindowsNT:  
+//__inline unsigned short _byteswap_ushort(unsigned short value)
+//{
+//	return (value >> _CHAR_BIT) | (value << _CHAR_BIT);
+//}
+//
+//__inline unsigned long _byteswap_ulong(unsigned long value)
+//{
+//	return _byteswap_ushort((unsigned short)value) << (2 * _CHAR_BIT) |
+//		_byteswap_ushort((unsigned short)(value >> (2 * _CHAR_BIT)));
+//}
+//
+//__inline unsigned __int64 _byteswap_uint64(unsigned __int64 value)
+//{
+//	return (unsigned __int64)(_byteswap_ulong((unsigned long)value)) << (4 * _CHAR_BIT) |
+//		(unsigned __int64)(_byteswap_ulong((unsigned long)(value >> (4 * _CHAR_BIT))));
+//}
+
+_INLINE_ uint16 bswap_16(uint16 value)
+{
+	return (value >> _CHAR_BIT) | (value << _CHAR_BIT);
+}
+
+_INLINE_ uint32 bswap_32(uint32 value)
+{
+	return bswap_16((uint16)value) << (2 * _CHAR_BIT) | bswap_16((uint16)(value >> (2 * _CHAR_BIT)));
+}
+
+_INLINE_ uint64 bswap_64(uint64 value)
+{
+	return (uint64)(bswap_32((unsigned long)value)) << (4 * _CHAR_BIT) | (uint64)(bswap_32((unsigned long)(value >> (4 * _CHAR_BIT))));
+}
+ 
+//比较1字节
+#define CMP_1B(a, b) { uint8 x = *(uint8 *)(a); uint8 y = *(uint8 *)(b); if (x != y) return x - y; }
+#define CMP_1B_R(a, b) return *(uint8 *)(a) - *(uint8 *)(b);
+
+//比较2字节
+#define CMP_2B(a, b) { uint16 x = bswap_16(*(uint16 *)(a)); uint16 y = bswap_16(*(uint16 *)(b)); if (x != y) return x - y; }
+#define CMP_2B_R(a, b) { uint16 x = bswap_16(*(uint16 *)(a)); uint16 y = bswap_16(*(uint16 *)(b)); return x - y; }
+
+//比较4字节
+#define CMP_4B(a, b) { uint32 x = bswap_32(*(uint32 *)(a)); uint32 y = bswap_32(*(uint32 *)(b)); if (x != y) return (x < y) ? -1 : 1; }
+#define CMP_4B_R(a, b) { uint32 x = bswap_32(*(uint32 *)(a)); uint32 y = bswap_32(*(uint32 *)(b)); return (x < y) ? -1 : (x > y) ? 1 : 0; }
+
+//比较8字节
+#define CMP_8B(a, b) { uint64 x = bswap_64(*(uint64 *)(a)); uint64 y = bswap_64(*(uint64 *)(b)); if (x != y) return (x < y) ? -1 : 1; }
+#define CMP_8B_R(a, b) { uint64 x = bswap_64(*(uint64 *)(a)); uint64 y = bswap_64(*(uint64 *)(b)); return (x < y) ? -1 : (x > y) ? 1 : 0; }
+
+//内存比较
+int32 qmemcmp_fast(const void* _a, const void* _b, tint _size)
+{
+	uint8*		a = (uint8*)_a;
+	uint8*		b = (uint8*)_b;
+	tptrdiff	size = _size;
+	uint64		x, y;
+	tptrdiff    i;
+
+	if (!size)
+		return 0;
+	
+	CMP_1B(a, b)
+
+	if (size >= 32)
+		goto cmp_long;
+
+	for (i = 0; i <= size - 16; i += 16, a += 16, b += 16)
+	{
+		CMP_8B(a + 0, b + 0)
+		CMP_8B(a + 8, b + 8)
+	}
+
+cmp_15:
+	switch (size - i)
+	{
+	case 0:
+		return 0;
+
+	case 1:
+		CMP_1B_R(a, b)
+
+	case 2:
+		CMP_2B_R(a, b)
+
+	case 3:
+		CMP_2B(a, b)
+		CMP_1B_R(a + 2, b + 2)
+
+	case 4:
+		CMP_4B_R(a, b)
+
+	case 5:
+		CMP_4B(a, b)
+		CMP_1B_R(a + 4, b + 4)
+
+	case 6:
+		CMP_4B(a, b)
+		CMP_2B_R(a + 4, b + 4)
+
+	case 7:
+		CMP_4B(a, b)
+		CMP_2B(a + 4, b + 4)
+		CMP_1B_R(a + 6, b + 6)
+
+	case 8:
+		CMP_8B_R(a, b)
+
+	case 9:
+		CMP_8B(a, b)
+		CMP_1B_R(a + 8, b + 8)
+
+	case 10:
+		CMP_8B(a, b)
+		CMP_2B_R(a + 8, b + 8)
+
+	case 11:
+		CMP_8B(a, b)
+		CMP_2B(a + 8, b + 8)
+		CMP_1B_R(a + 10, b + 10)
+
+	case 12:
+		CMP_8B(a, b)
+		CMP_4B_R(a + 8, b + 8)
+
+	case 13:
+		CMP_8B(a, b)
+		CMP_4B(a + 8, b + 8)
+		CMP_1B_R(a + 12, b + 12)
+
+	case 14:
+		CMP_8B(a, b)
+		CMP_4B(a + 8, b + 8)
+		CMP_2B_R(a + 12, b + 12)
+
+	case 15:
+		CMP_8B(a, b)
+		CMP_4B(a + 8, b + 8)
+		CMP_2B(a + 12, b + 12)
+		CMP_1B_R(a + 14, b + 14)
+
+	} //switch
+
+cmp_long:
+	for (i = 0; i <= size - 32; i += 32, a += 32, b += 32)
+	{
+		x = *(uint64*)(a + 0);   if (x != *(uint64*)(b + 0))    goto ret0;
+		x = *(uint64*)(a + 8);   if (x != *(uint64*)(b + 8))    goto ret8;
+		x = *(uint64*)(a + 16);  if (x != *(uint64*)(b + 16))   goto ret16;
+		x = *(uint64*)(a + 24);  if (x != *(uint64*)(b + 24))   goto ret24;
+	}
+
+	if (size - i < 16)
+		goto cmp_15;
+
+	x = *(uint64*)(a + 0);  if (x != *(uint64*)(b + 0))  goto ret0;
+	x = *(uint64*)(a + 8);  if (x != *(uint64*)(b + 8))  goto ret8;
+
+	a += 16;
+	b += 16;
+	i += 16;
+	goto cmp_15;
+
+ret0:    y = *(uint64*)(b + 0);    goto ret;
+ret8:    y = *(uint64*)(b + 8);    goto ret;
+ret16:   y = *(uint64*)(b + 16);   goto ret;
+ret24:   y = *(uint64*)(b + 24);   goto ret;
+
+ret:
+	x = bswap_64(x);
+	y = bswap_64(y);
+	return (x < y) ? -1 : (x > y) ? 1 : 0;
+} //_memcmp
+
+
+//相等1字节
+#define CMPEQ_1B(a, b) if (*(uint8 *)(a) != *(uint8 *)(b)) return 0;
+#define CMPEQ_1B_R(a, b) return *(uint8 *)(a) == *(uint8 *)(b);
+
+//相等2字节
+#define CMPEQ_2B(a, b) if (*(uint16 *)(a) != *(uint16 *)(b)) return 0;
+#define CMPEQ_2B_R(a, b) return *(uint16 *)(a) == *(uint16 *)(b);
+
+//相等4字节
+#define CMPEQ_4B(a, b) if (*(uint32 *)(a) != *(uint32 *)(b)) return 0;
+#define CMPEQ_4B_R(a, b) return *(uint32 *)(a) == *(uint32 *)(b);
+
+//相等8字节
+#define CMPEQ_8B(a, b) if (*(uint64 *)(a) != *(uint64 *)(b)) return 0;
+#define CMPEQ_8B_R(a, b) return *(uint64 *)(a) == *(uint64 *)(b);
+
+//内存是否相等
+int32 qmemeq_fast(const void* _a, const void* _b, tint _size)
+{
+	uint8*		a = (uint8*)_a;
+	uint8*		b = (uint8*)_b;
+	tptrdiff	size = _size;
+	tptrdiff    i;
+
+	if (!size)
+		return 1;
+
+	CMPEQ_1B(a, b)
+
+#if 1
+		for (i = 0; i <= size - 16; i += 16, a += 16, b += 16)
+		{
+			CMPEQ_8B(a + 0, b + 0)
+			CMPEQ_8B(a + 8, b + 8)
+		}
+
+#elif VX_SSE2
+		__v1i8 v0, v1;
+		for (i = 0; i <= size - 16; i += 16, a += 16, b += 16)
+		{
+			v0 = loadu(a);
+			v1 = loadu(b);
+
+			if (v0 != v1)
+				return 0;
+		}
+#endif
+
+	switch (size - i)
+	{
+	case 0:
+		return 1;
+
+	case 1:
+		CMPEQ_1B_R(a, b)
+
+	case 2:
+		CMPEQ_2B_R(a, b)
+
+	case 3:
+		CMPEQ_2B(a, b)
+		CMPEQ_1B_R(a + 2, b + 2)
+
+	case 4:
+		CMPEQ_4B_R(a, b)
+
+	case 5:
+		CMPEQ_4B(a, b)
+		CMPEQ_1B_R(a + 4, b + 4)
+
+	case 6:
+		CMPEQ_4B(a, b)
+		CMPEQ_2B_R(a + 4, b + 4)
+
+	case 7:
+		CMPEQ_4B(a, b)
+		CMPEQ_2B(a + 4, b + 4)
+		CMPEQ_1B_R(a + 6, b + 6)
+
+	case 8:
+		CMPEQ_8B_R(a, b)
+
+	case 9:
+		CMPEQ_8B(a, b)
+		CMPEQ_1B_R(a + 8, b + 8)
+
+	case 10:
+		CMPEQ_8B(a, b)
+		CMPEQ_2B_R(a + 8, b + 8)
+
+	case 11:
+		CMPEQ_8B(a, b)
+		CMPEQ_2B(a + 8, b + 8)
+		CMPEQ_1B_R(a + 10, b + 10)
+
+	case 12:
+		CMPEQ_8B(a, b)
+		CMPEQ_4B_R(a + 8, b + 8)
+
+	case 13:
+		CMPEQ_8B(a, b)
+		CMPEQ_4B(a + 8, b + 8)
+		CMPEQ_1B_R(a + 12, b + 12)
+
+	case 14:
+		CMPEQ_8B(a, b)
+		CMPEQ_4B(a + 8, b + 8)
+		CMPEQ_2B_R(a + 12, b + 12)
+
+	case 15:
+		CMPEQ_8B(a, b)
+		CMPEQ_4B(a + 8, b + 8)
+		CMPEQ_2B(a + 12, b + 12)
+		CMPEQ_1B_R(a + 14, b + 14)
+	} //switch
+} //memeq

@@ -1,0 +1,516 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="res">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="lib">
+      <UniqueIdentifier>{ddefd770-8337-4660-954a-5a7598c20f9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\array">
+      <UniqueIdentifier>{dee20262-a354-4bf8-b8eb-62d120e56492}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\win32cpu">
+      <UniqueIdentifier>{b359a410-6f0e-44dd-a185-c60510889f68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\win32timer">
+      <UniqueIdentifier>{216e3e9d-bac8-499d-84eb-e3b986cb6cd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\win32filesearch">
+      <UniqueIdentifier>{f8cdf19a-dd12-409e-98dd-56ebcf0a772c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\win32gdi">
+      <UniqueIdentifier>{043331a0-b471-4d08-90d8-f941a72ef64c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\win32memdc">
+      <UniqueIdentifier>{d4014940-60af-49dc-8dd6-b8c18b692bec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\win32sync">
+      <UniqueIdentifier>{065e6838-be52-464a-8ea2-4b30e85b3ef4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\win32thread">
+      <UniqueIdentifier>{a436ff92-de0d-4f4e-b23e-5d028d3bde7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\hash">
+      <UniqueIdentifier>{c9f15788-959c-4b2a-bed7-7f3a2cdfc7a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\string">
+      <UniqueIdentifier>{ee907d69-7d69-4498-813a-62660a366de8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\list">
+      <UniqueIdentifier>{7439fc4e-1d22-4087-b89d-884a1d9f8bbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\utility">
+      <UniqueIdentifier>{a3945ed3-bfd2-4825-8ceb-1ff07b69afb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\win32file">
+      <UniqueIdentifier>{b270ed06-e35c-4860-a3ce-a6ae15f5a7b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\win32image">
+      <UniqueIdentifier>{273e8fa8-f6c3-494b-8cda-018236f78e8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\win32imagelist">
+      <UniqueIdentifier>{f61fb1b8-1a03-43cc-8d6e-29b3ec781d0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="lib\dictionary">
+      <UniqueIdentifier>{623208fd-daa2-4b73-b979-e32257352648}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\utility\mem">
+      <UniqueIdentifier>{dc310bce-c80a-42c1-abd9-7204e3e655b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\utility\string">
+      <UniqueIdentifier>{8fa239a6-0865-4c8d-9114-c782922a3e29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\utility\format">
+      <UniqueIdentifier>{837ba4d6-10fd-4f15-8447-9ae7711b5e10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\utility\convert">
+      <UniqueIdentifier>{43e29a0a-8de0-4a1c-acca-78ad81af7032}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\win32filejournal">
+      <UniqueIdentifier>{b14557f5-47a4-44b9-9727-a8ecc5b2a7b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\win32mmap">
+      <UniqueIdentifier>{5cf72830-344a-4358-9126-156f3c9b2323}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\win32exception">
+      <UniqueIdentifier>{df5bf1ba-36d1-40f3-ace7-2cdf13ef544d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\quicklz">
+      <UniqueIdentifier>{3c10648f-7802-4d6b-b1ff-8191425f3af6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\win32include">
+      <UniqueIdentifier>{4f6eb7eb-9336-4ed5-ade8-891277c8626f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\regex">
+      <UniqueIdentifier>{18d25e3c-bbaf-407e-a253-160b7ebce5c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\win32gdip">
+      <UniqueIdentifier>{86dc6850-a48d-4363-88c7-daee82296a9f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="app.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\win32cpu\cpu.cpp">
+      <Filter>lib\win32cpu</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\win32timer\timer.cpp">
+      <Filter>lib\win32timer</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\win32filesearch\filesearch.cpp">
+      <Filter>lib\win32filesearch</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\win32gdi\gdi.cpp">
+      <Filter>lib\win32gdi</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\win32memdc\memdc.cpp">
+      <Filter>lib\win32memdc</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\win32sync\sync.cpp">
+      <Filter>lib\win32sync</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\win32thread\thread.cpp">
+      <Filter>lib\win32thread</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\hash\hash.cpp">
+      <Filter>lib\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\string\string.cpp">
+      <Filter>lib\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\list\list.cpp">
+      <Filter>lib\list</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\win32file\file.cpp">
+      <Filter>lib\win32file</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\win32image\image.cpp">
+      <Filter>lib\win32image</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\array\array.cpp">
+      <Filter>lib\array</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\dictionary\MurmurHash3.cpp">
+      <Filter>lib\dictionary</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\memchr.c">
+      <Filter>lib\utility\mem</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\memcmp.c">
+      <Filter>lib\utility\mem</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\memcpy.c">
+      <Filter>lib\utility\mem</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\memmove.c">
+      <Filter>lib\utility\mem</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\memset.c">
+      <Filter>lib\utility\mem</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strcat.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strchr.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strcmp.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strcpy.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strcspn.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\stricmp.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strdup.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strlcat.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strlcpy.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strlen.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strmatch.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strncat.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strncmp.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strncpy.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strndup.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strnicmp.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strnlen.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strnset.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strpbrk.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strrchr.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strrev.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strsep.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strset.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strspn.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strstr.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strxspn.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\vsprintf.c">
+      <Filter>lib\utility\format</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\c2int.c">
+      <Filter>lib\utility\convert</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\strasc.c">
+      <Filter>lib\utility\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\c2lng.c">
+      <Filter>lib\utility\convert</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\c2dbl.c">
+      <Filter>lib\utility\convert</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\c2flt.c">
+      <Filter>lib\utility\convert</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\cstri.c">
+      <Filter>lib\utility\convert</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\cstrui.c">
+      <Filter>lib\utility\convert</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\c2uint.c">
+      <Filter>lib\utility\convert</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\c2ulng.c">
+      <Filter>lib\utility\convert</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\c2int64.c">
+      <Filter>lib\utility\convert</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\c2uint64.c">
+      <Filter>lib\utility\convert</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\cstrl.c">
+      <Filter>lib\utility\convert</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\cstrul.c">
+      <Filter>lib\utility\convert</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\cstri64.c">
+      <Filter>lib\utility\convert</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\cstrui64.c">
+      <Filter>lib\utility\convert</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\cstrd.c">
+      <Filter>lib\utility\convert</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\cstrf.c">
+      <Filter>lib\utility\convert</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\utility\word.c">
+      <Filter>lib\utility\convert</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\win32filejournal\filejournal.cpp">
+      <Filter>lib\win32filejournal</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\string\wstring.cpp">
+      <Filter>lib\string</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\quicklz\quicklz.c">
+      <Filter>lib\quicklz</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\win32filejournal\filejournals.cpp">
+      <Filter>lib\win32filejournal</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\regex\syntax2.cpp">
+      <Filter>lib\regex</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\regex\regexpr2.cpp">
+      <Filter>lib\regex</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\win32gdip\gdip.cpp">
+      <Filter>lib\win32gdip</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\lib.h">
+      <Filter>lib</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\typedef.h">
+      <Filter>lib</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\win32cpu\cpu.h">
+      <Filter>lib\win32cpu</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\win32timer\timer.h">
+      <Filter>lib\win32timer</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\win32filesearch\filesearch.h">
+      <Filter>lib\win32filesearch</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\win32gdi\gdi.h">
+      <Filter>lib\win32gdi</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\win32memdc\memdc.h">
+      <Filter>lib\win32memdc</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\win32sync\sync.h">
+      <Filter>lib\win32sync</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\win32thread\thread.h">
+      <Filter>lib\win32thread</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\hash\hash.h">
+      <Filter>lib\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\string\string.h">
+      <Filter>lib\string</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\list\list.h">
+      <Filter>lib\list</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\win32file\file.h">
+      <Filter>lib\win32file</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\win32image\image.h">
+      <Filter>lib\win32image</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\array\array.h">
+      <Filter>lib\array</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\dictionary\hashhelpers.h">
+      <Filter>lib\dictionary</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\dictionary\vmemalloc.h">
+      <Filter>lib\dictionary</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\dictionary\dictionary.h">
+      <Filter>lib\dictionary</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\dictionary\SuperFastHash.h">
+      <Filter>lib\dictionary</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\dictionary\FastHash.h">
+      <Filter>lib\dictionary</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\dictionary\MurmurHash3.h">
+      <Filter>lib\dictionary</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\dictionary\BlizzardHash.h">
+      <Filter>lib\dictionary</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\utility\utility.h">
+      <Filter>lib\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\utility\assert.h">
+      <Filter>lib\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\typecvt.h">
+      <Filter>lib</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\win32filejournal\filejournal.h">
+      <Filter>lib\win32filejournal</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\string\wstring.h">
+      <Filter>lib\string</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\win32mmap\memmap.h">
+      <Filter>lib\win32mmap</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\win32exception\exception.h">
+      <Filter>lib\win32exception</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\quicklz\quicklz.h">
+      <Filter>lib\quicklz</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\win32include\winnt.h">
+      <Filter>lib\win32include</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\win32filejournal\filejournals.h">
+      <Filter>lib\win32filejournal</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\win32filejournal\ntfs.h">
+      <Filter>lib\win32filejournal</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\win32filejournal\usn.h">
+      <Filter>lib\win32filejournal</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\win32filejournal\iocp.h">
+      <Filter>lib\win32filejournal</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\win32filejournal\iocpfilereq.h">
+      <Filter>lib\win32filejournal</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\regex\syntax2.h">
+      <Filter>lib\regex</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\regex\restack.h">
+      <Filter>lib\regex</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\regex\reimpl2.h">
+      <Filter>lib\regex</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\regex\regexpr2.h">
+      <Filter>lib\regex</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\win32gdip\gdip.h">
+      <Filter>lib\win32gdip</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="lib\utility\memchr.asm">
+      <Filter>lib\utility\mem</Filter>
+    </None>
+    <None Include="lib\utility\memcmp.c-bak-勿删">
+      <Filter>lib\utility\mem</Filter>
+    </None>
+    <None Include="lib\utility\memcpy.c-bak-勿删">
+      <Filter>lib\utility\mem</Filter>
+    </None>
+    <None Include="lib\utility\memmove.asm">
+      <Filter>lib\utility\mem</Filter>
+    </None>
+    <None Include="lib\utility\memset.asm">
+      <Filter>lib\utility\mem</Filter>
+    </None>
+    <None Include="lib\utility\strchr.asm">
+      <Filter>lib\utility\string</Filter>
+    </None>
+    <None Include="lib\utility\strrchr.asm">
+      <Filter>lib\utility\string</Filter>
+    </None>
+    <None Include="lib\utility\strstr.asm">
+      <Filter>lib\utility\string</Filter>
+    </None>
+    <None Include="lib\utility\strcat.asm">
+      <Filter>lib\utility\string</Filter>
+    </None>
+    <None Include="lib\utility\strcmp.asm">
+      <Filter>lib\utility\string</Filter>
+    </None>
+    <None Include="lib\utility\strcspn.asm">
+      <Filter>lib\utility\string</Filter>
+    </None>
+    <None Include="lib\utility\strlen.asm">
+      <Filter>lib\utility\string</Filter>
+    </None>
+    <None Include="lib\utility\strncat.asm">
+      <Filter>lib\utility\string</Filter>
+    </None>
+    <None Include="lib\utility\strncmp.asm">
+      <Filter>lib\utility\string</Filter>
+    </None>
+    <None Include="lib\utility\strncpy.asm">
+      <Filter>lib\utility\string</Filter>
+    </None>
+    <None Include="lib\utility\strnset.asm">
+      <Filter>lib\utility\string</Filter>
+    </None>
+    <None Include="lib\utility\strpbrk.asm">
+      <Filter>lib\utility\string</Filter>
+    </None>
+    <None Include="lib\utility\strrev.asm">
+      <Filter>lib\utility\string</Filter>
+    </None>
+    <None Include="lib\utility\strset.asm">
+      <Filter>lib\utility\string</Filter>
+    </None>
+    <None Include="lib\utility\strspn.asm">
+      <Filter>lib\utility\string</Filter>
+    </None>
+    <None Include="lib\utility\strnicmp.asm">
+      <Filter>lib\utility\string</Filter>
+    </None>
+    <None Include="lib\utility\memicmp.asm">
+      <Filter>lib\utility\mem</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="lib\utility\memcpy.asm">
+      <Filter>lib\utility\mem</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>
