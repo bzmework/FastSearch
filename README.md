@@ -16,14 +16,14 @@ FastSearch是一个快速文件搜索系统，它的原理是通过读取NTFS文
 由于技术水平和时间精力有限，开发一段时间以后不再继续，现在采用Mozilla协议公布源码，希望有人能不断完善下去，让更多的程序员
 掌握快速文件搜索涉及到的各种技术，希望有志于这方面的朋友继续完善这个项目。现在对FastSearch做一个说明：
 
-1、NTFS文件系统.docx。
+1、NTFS文件系统.docx。    
     集合参考各种资料以后进行的摘录，采用图表和文字的形式进行总结，有不错的参考价值。
 
-2、Lib库。
-    FastSearch中有一个C/C++库，包含了各种功能函数，能帮助你学习各种算法，具体包括：
-    array，dictionary，hash，libpng，list，quicklz，regex，string，utility，win32cpu，win32file，win32filejournal，win32filesearch，
-    win32gdi，win32gdip，win32image，win32mmap，win32sync，win32thread，win32timer ...。其中：
-
+2、Lib库。    
+    FastSearch中有一个C/C++库，包含了各种功能函数，能帮助你学习各种算法，具体包括：  
+    array，dictionary，hash，libpng，list，quicklz，regex，string，utility，win32cpu，win32file，win32filejournal，
+    win32filesearch，win32gdi，win32gdip，win32image，win32mmap，win32sync，win32thread，win32timer ...。其中：    
+    
     dictionary，采用微软的.net framework中提供的优秀字典算法；
     libpng， 优秀的PNG图片库，来自：http://www.libpng.org/
     quicklz，一个精致的速度超快的压缩库，来自：http://www.quicklz.com；
@@ -34,8 +34,8 @@ FastSearch是一个快速文件搜索系统，它的原理是通过读取NTFS文
     win32gdi/win32gdip，封装GDI/GDI+的各种常用功能;
     win32image，采用GDI+呈现各种格式图像；
     win32mmap，内存映射；
-    win32thread，多线程；
-
+    win32thread，多线程；    
+    
     utility则包含了许多常用的功能，它参考了不同操作系统中C库的算法做出的筛选，包括：
     int32 hiword(int32 n); //高字
     int32 loword(int32 n); //低字
