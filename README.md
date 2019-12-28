@@ -11,7 +11,7 @@ FastSearch是一个快速文件搜索系统，它的原理是通过读取NTFS文
 但是，前者SwiftSearch采用异步IO扫描但源码可读性很差，而NTFS Search速度太慢，并且作者在其发布的新版中，
 采用了内存映射技术，令扫描出来的文件占用内存较少，然而作者敝帚自珍，不再公布源码。
 
-总之，要实现一个像Everything（www.voidtools.com）一样强大的文件搜索系统还需要做许多工作，
+总之，要实现一个像Everything(www.voidtools.com)一样强大的文件搜索系统还需要做许多工作，
 例如：多线程文件排序、文件压缩、文件索引、UI虚拟呈现，等等。目前做得最好的还是Everything。
 
 由于技术水平和时间精力有限，开发一段时间以后不再继续，现在采用Mozilla协议公布源码，希望有人能不断完善下去，让更多的程序员
@@ -29,7 +29,7 @@ FastSearch是一个快速文件搜索系统，它的原理是通过读取NTFS文
     libpng， 优秀的PNG图片库，来自：http://www.libpng.org/
     quicklz，一个精致的速度超快的压缩库，来自：http://www.quicklz.com；
     regex，GRETA正则表达式库，来自微软；
-    win32cpu，一个显示CPU使用状态的小部件，有不错的呈现形态(看后面的图片)；
+    win32cpu，一个显示CPU使用状态的小部件，有不错的呈现形态(看前面的图片)；
     win32filejournal，快速文件搜索；
     win32filesearch，传统的文件搜索；
     win32gdi/win32gdip，封装GDI/GDI+的各种常用功能;
